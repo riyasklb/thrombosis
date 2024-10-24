@@ -3,7 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:thrombosis/bottum_nav/bottum_nav_bar.dart';
-
+import 'package:thrombosis/constans/color.dart';
+import 'package:thrombosis/model/profile_model.dart';
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -29,7 +30,7 @@ class RegisterScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: [kheight40, Image   .network('https://personalpivots.com/wp-content/uploads/2022/08/activity-log-1024x1024.png'),kheight40, 
               _buildTextField(
                 controller: usernameController,
                 labelText: 'Username',
@@ -145,28 +146,28 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  // Save data to Hive
+  // Save data using ProfileModel to Hive
   Future<void> _saveData(BuildContext context) async {
-    final userBox = Hive.box('userBox'); // Open the user box
+    final profileBox = Hive.box<ProfileModel>('profileBox'); // Open the profile box
+    final settingsBox = Hive.box('settingsBox'); // Use a separate box for flags
 
-    // Store the user data in a map
-    final userData = {
-      'username': usernameController.text,
-      'email': emailController.text,
-      'age': ageController.text,
-      'mobile': mobileController.text,
-      'nhsNumber': nhsNumberController.text,
-      'gender': selectedGender,
-    };
+    // Create a new ProfileModel instance
+    final profile = ProfileModel()
+      ..username = usernameController.text
+      ..email = emailController.text
+      ..age = int.parse(ageController.text)
+      ..mobile = mobileController.text
+      ..nhsNumber = nhsNumberController.text
+      ..gender = selectedGender ?? 'Not specified';
 
-    // Save the data in Hive
-    await userBox.put('userData', userData);
+    // Save the profile data in Hive
+    await profileBox.put('userProfile', profile);
 
-    // Save registration flag
-    await userBox.put('isRegistered', true);
+    // Save registration flag in a separate box
+    await settingsBox.put('isRegistered', true);
 
     // Print success message
-    print("User data saved: $userData");
+    print("Profile data saved: ${profile.username}");
 
     // Navigate to BottomNavBar after successful registration
     Navigator.pushReplacement(

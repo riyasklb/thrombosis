@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:thrombosis/model/hive_model.dart';
 import 'package:thrombosis/views/callender_screen.dart';
+import 'package:thrombosis/views/show_whole%20activity_screen.dart/dummy.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -68,45 +69,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     itemBuilder: (context, index) {
                       final activity = box.getAt(index);
 
-                      return Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        margin: EdgeInsets.symmetric(vertical: 10.h),
-                        child: Padding(
-                          padding: EdgeInsets.all(16.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.fitness_center, color: Colors.blueAccent, size: 30),
-                                  SizedBox(width: 10.w),
-                                  Text(
-                                    'Day ${index + 1}',
-                                    style: GoogleFonts.lato(fontSize: 24.sp, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10.h),
-                              Divider(color: Colors.grey.shade300),
-                              SizedBox(height: 10.h),
-                              Text('Walking: ${activity?.minutesWalked} minutes', 
-                                  style: GoogleFonts.lato(fontSize: 18.sp)),
-                              Text('Sleep: ${activity?.hoursSlept} hours', 
-                                  style: GoogleFonts.lato(fontSize: 18.sp)),
-                              Text('Water: ${activity?.waterIntake} liters', 
-                                  style: GoogleFonts.lato(fontSize: 18.sp)),
-                              SizedBox(height: 10.h),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  'Logged on: ${activity?.date?.toLocal().toString().split(' ')[0]}',
-                                  style: GoogleFonts.lato(fontSize: 14.sp, fontStyle: FontStyle.italic),
+                      return InkWell(onTap: (){
+                        Get.to(ActivityScreen());
+                      },
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          margin: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Padding(
+                            padding: EdgeInsets.all(16.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.fitness_center, color: Colors.blueAccent, size: 30),
+                                    SizedBox(width: 10.w),
+                                    Text(
+                                      'Day ${index + 1}',
+                                      style: GoogleFonts.lato(fontSize: 24.sp, fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 10.h),
+                                Divider(color: Colors.grey.shade300),
+                                SizedBox(height: 10.h),
+                                Text('Walking: ${activity?.minutesWalked} minutes', 
+                                    style: GoogleFonts.lato(fontSize: 18.sp)),
+                                Text('Sleep: ${activity?.hoursSlept} hours', 
+                                    style: GoogleFonts.lato(fontSize: 18.sp)),
+                                Text('Water: ${activity?.waterIntake} liters', 
+                                    style: GoogleFonts.lato(fontSize: 18.sp)),
+                                SizedBox(height: 10.h),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'Logged on: ${activity?.date?.toLocal().toString().split(' ')[0]}',
+                                    style: GoogleFonts.lato(fontSize: 14.sp, fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

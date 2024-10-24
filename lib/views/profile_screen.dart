@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:thrombosis/model/profile_model.dart';
 import 'package:thrombosis/constans/color.dart';
-import 'package:thrombosis/views/dashboard_screen.dart';
-
 import '../auth/register_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userBox = Hive.box('userBox');
-    final userData = userBox.get('userData', defaultValue: {});
+    final profileBox = Hive.box<ProfileModel>('profileBox');
+    final ProfileModel? profileData = profileBox.get('userProfile'); // Fetch ProfileModel
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.w),
         child: SingleChildScrollView(
           child: Column(
-            children: [kheight40,
+            children: [
               SizedBox(height: 20.h),
 
               // Profile Avatar
@@ -50,22 +48,27 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 20.h),
 
               // Profile Data Cards
-              _buildProfileCard('Username', userData['username']),
-              _buildProfileCard('Email', userData['email']),
-              _buildProfileCard('Password', userData['password']),
-              _buildProfileCard('Age', userData['age']),
-              _buildProfileCard('Mobile', userData['mobile']),
-              _buildProfileCard('NHS Number', userData['nhsNumber']),
-              _buildProfileCard('Gender', userData['gender']),
+              _buildProfileCard('Username', profileData?.username),
+              _buildProfileCard('Email', profileData?.email),
+              _buildProfileCard('Age', profileData?.age.toString()),
+              _buildProfileCard('Mobile', profileData?.mobile),
+              _buildProfileCard('NHS Number', profileData?.nhsNumber),
+              _buildProfileCard('Gender', profileData?.gender),
 
               SizedBox(height: 30.h),
 
               // Logout Button
               ElevatedButton(
                 onPressed: () async {
-                  await userBox.delete('userData');
-                  await userBox.delete('activityBox'); // Clear data
-              Get.offAll(RegisterScreen());
+                  // Clear user profile data
+                  await profileBox.delete('userProfile');
+
+                  // Also clear any related data from other boxes like activityBox
+                  final activityBox = Hive.box('activityBox');
+                  await activityBox.clear();
+
+                  // Navigate to RegisterScreen
+                  Get.offAll(() => RegisterScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
@@ -84,7 +87,9 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-          kheight40,kheight40,kheight40,  ],
+
+              SizedBox(height: 40.h),
+            ],
           ),
         ),
       ),
@@ -147,8 +152,6 @@ class ProfileScreen extends StatelessWidget {
         return Icons.person;
       case 'Email':
         return Icons.email;
-      case 'Password':
-        return Icons.lock;
       case 'Age':
         return Icons.cake;
       case 'Mobile':

@@ -5,14 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'package:thrombosis/model/hive_model.dart';
+import 'package:thrombosis/model/profile_model.dart';
 import 'package:thrombosis/splash/splash_screen.dart';
 
 
 void main() async{
   await Hive.initFlutter();
   Hive.registerAdapter(ActivityModelAdapter());
+    Hive.registerAdapter(ProfileModelAdapter());
    await Hive.openBox('userBox');
+   await Hive.openBox<ProfileModel>('profileBox');
     await Hive.openBox<ActivityModel>('activityBox');
+    await Hive.openBox('settingsBox');
   runApp(const MyApp());
 }
 

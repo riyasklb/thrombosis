@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 
 part 'hive_model.g.dart'; // Make sure to run the build command after creating this file
 
+
+
 @HiveType(typeId: 0)
 class ActivityModel {
   @HiveField(0)

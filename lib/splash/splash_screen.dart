@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:thrombosis/auth/register_screen.dart';
@@ -23,25 +25,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // Check if the user is registered
   Future<void> _checkRegistrationStatus() async {
-    final userBox = Hive.box('userBox');
-    final bool? isRegistered = userBox.get('isRegistered', defaultValue: false);
+    final settingsBox = Hive.box('settingsBox'); // Separate box for settings/flags
+    final bool isRegistered = settingsBox.get('isRegistered', defaultValue: false);
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (isRegistered == true) {
-        // Navigate to BottomNavBar if registered
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => BottumNavBar()),
-        );
-      } else {
-        // Navigate to RegisterScreen if not registered
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => RegisterScreen()),
-        );
-      }
-    });
+    // Delay for 3 seconds before navigating
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (isRegistered) {
+      // Navigate to BottomNavBar if registered
+      Get.offAll(() => BottumNavBar());
+    } else {
+      // Navigate to RegisterScreen if not registered
+      Get.offAll(() => RegisterScreen());
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
