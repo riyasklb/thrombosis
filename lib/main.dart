@@ -3,7 +3,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:thrombosis/bottum_nav/bottum_nav_bar.dart';
+
 import 'package:thrombosis/model/hive_model.dart';
 import 'package:thrombosis/splash/splash_screen.dart';
 

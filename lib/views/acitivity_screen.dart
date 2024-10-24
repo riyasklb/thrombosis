@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:thrombosis/model/hive_model.dart';
+import 'package:thrombosis/views/callender_screen.dart';
 
 class DailyActivitiesScreen extends StatefulWidget {
   @override
@@ -36,56 +37,93 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
       appBar: AppBar(
         title: Text(
           'Daily Activities',
-          style: GoogleFonts.lato(fontSize: 22.sp),
+          style: GoogleFonts.poppins(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
+        backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
+      body: Container(height: double.infinity,
+        color: Colors.grey[200], // Light background color
         padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Log Your Activities',
-              style: GoogleFonts.lato(fontSize: 22.sp, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20.h),
-            _buildActivityInput(
-              label: 'Minutes Walked',
-              hintText: 'Enter minutes walked',
-              controller: _walkingController,
-              icon: Icons.directions_walk,
-            ),
-            SizedBox(height: 20.h),
-            _buildActivityInput(
-              label: 'Hours Slept',
-              hintText: 'Enter hours slept',
-              controller: _sleepController,
-              icon: Icons.bed,
-            ),
-            SizedBox(height: 20.h),
-            _buildActivityInput(
-              label: 'Water Intake (Liters)',
-              hintText: 'Enter water intake in liters',
-              controller: _waterIntakeController,
-              icon: Icons.local_drink,
-            ),
-            SizedBox(height: 40.h),
-            Center(
-              child: ElevatedButton(
-                onPressed: _submitActivities,
-                child: Text(
-                  'Submit',
-                  style: GoogleFonts.lato(fontSize: 18.sp),
+        child: SingleChildScrollView( // Allow scrolling for smaller screens
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Log Your Activities',
+                style: GoogleFonts.lato(fontSize: 24.sp, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20.h),
+              Card(
+                elevation: 4, // Add elevation for shadow effect
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r),
+                child: Padding(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    children: [
+                      _buildActivityInput(
+                        label: 'Minutes Walked',
+                        hintText: 'Enter minutes walked',
+                        controller: _walkingController,
+                        icon: Icons.directions_walk,
+                      ),
+                      SizedBox(height: 20.h),
+                      _buildActivityInput(
+                        label: 'Hours Slept',
+                        hintText: 'Enter hours slept',
+                        controller: _sleepController,
+                        icon: Icons.bed,
+                      ),
+                      SizedBox(height: 20.h),
+                      _buildActivityInput(
+                        label: 'Water Intake (Liters)',
+                        hintText: 'Enter water intake in liters',
+                        controller: _waterIntakeController,
+                        icon: Icons.local_drink,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 40.h),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _submitActivities,
+                  child: Text(
+                    'Submit',
+                    style: GoogleFonts.lato(fontSize: 18.sp, color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 80.w, vertical: 16.h),
+                    backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ActivityCalendarScreen()), // Navigate to calendar screen
+                    );
+                  },
+                  child: Text(
+                    'View Activities Calendar',
+                    style: GoogleFonts.lato(fontSize: 16.sp, color: Colors.blueAccent),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -112,8 +150,15 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
           decoration: InputDecoration(
             hintText: hintText,
             prefixIcon: Icon(icon, color: Colors.blue),
+            filled: true,
+            fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: Colors.blueAccent),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: Colors.blueAccent),
             ),
           ),
         ),
@@ -121,33 +166,39 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
     );
   }
 
-void _submitActivities() {
-  final String walking = _walkingController.text;
-  final String sleep = _sleepController.text;
-  final String waterIntake = _waterIntakeController.text;
+  void _submitActivities() {
+    final String walking = _walkingController.text;
+    final String sleep = _sleepController.text;
+    final String waterIntake = _waterIntakeController.text;
 
-  if (walking.isNotEmpty && sleep.isNotEmpty && waterIntake.isNotEmpty) {
-    final activity = ActivityModel(
-      int.parse(walking),
-      int.parse(sleep),
-      double.parse(waterIntake),
-      DateTime.now(), // Capture the current date
-    );
+    if (walking.isNotEmpty && sleep.isNotEmpty && waterIntake.isNotEmpty) {
+      final activity = ActivityModel(
+        int.parse(walking),
+        int.parse(sleep),
+        double.parse(waterIntake),
+        DateTime.now(), // Capture the current date
+      );
 
-    _activityBox.add(activity); // Save to Hive
+      _activityBox.add(activity); // Save to Hive
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Activities logged successfully!')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Activities logged successfully!')),
+      );
 
-    _walkingController.clear();
-    _sleepController.clear();
-    _waterIntakeController.clear();
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Please fill in all fields')),
-    );
+      // Clear the input fields
+      _walkingController.clear();
+      _sleepController.clear();
+      _waterIntakeController.clear();
+      
+      // Navigate to the calendar screen after submission
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ActivityCalendarScreen()), // Redirect to calendar screen
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
+    }
   }
-}
-
 }

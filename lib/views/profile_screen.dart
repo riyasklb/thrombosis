@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/get_core.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:thrombosis/constans/color.dart';
+import 'package:thrombosis/views/dashboard_screen.dart';
+
+import '../auth/register_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -58,8 +63,9 @@ class ProfileScreen extends StatelessWidget {
               // Logout Button
               ElevatedButton(
                 onPressed: () async {
-                  await userBox.delete('userData'); // Clear data
-                  Navigator.pop(context); // Navigate back
+                  await userBox.delete('userData');
+                  await userBox.delete('activityBox'); // Clear data
+              Get.offAll(RegisterScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,

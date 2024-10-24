@@ -81,8 +81,8 @@ class _BottumNavBarState extends State<BottumNavBar> {
               bottomBarItems: [
                
                 BottomBarItem(
-                  inActiveItem: Icon(Icons.calendar_today, color: kwhite),
-                  activeItem: Icon(Icons.calendar_today, color: kwhite),
+                  inActiveItem: Icon(Icons.dashboard, color: kwhite),
+                  activeItem: Icon(Icons.dashboard, color: kwhite),
                  
                 ),
                 BottomBarItem(
