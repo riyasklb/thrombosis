@@ -48,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           InkWell(
               onTap: () {
-                Get.to(PdfGenaerateScreen());
+                Get.to(PdfGenerateScreen());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -3,28 +3,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:thrombosis/tools/constans/model/profile_model.dart';
 import 'package:thrombosis/tools/constans/color.dart';
+import 'package:thrombosis/tools/constans/model/hive_model.dart';
+import 'package:thrombosis/tools/constans/model/profile_model.dart';
 import 'auth/register_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileBox = Hive.box<ProfileModel>('profileBox');
-    final ProfileModel? profileData = profileBox.get('userProfile'); // Fetch ProfileModel
+    final activityBox = Hive.box<ActivityModel>('activityBox');
+    final settingsBox = Hive.box('settingsBox');
 
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Profile',
-           style: GoogleFonts.poppins(
+          style: GoogleFonts.poppins(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         backgroundColor: Colors.blueAccent,
-       
         elevation: 8,
       ),
       body: Padding(
@@ -48,24 +50,18 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 20.h),
 
               // Profile Data Cards
-              _buildProfileCard('Username', profileData?.username),
-              _buildProfileCard('Email', profileData?.email),
-              _buildProfileCard('Age', profileData?.age.toString()),
-              _buildProfileCard('Mobile', profileData?.mobile),
-              _buildProfileCard('NHS Number', profileData?.nhsNumber),
-              _buildProfileCard('Gender', profileData?.gender),
+              _buildProfileCard('Username', profileBox.get('userProfile')?.username),
+              _buildProfileCard('Email', profileBox.get('userProfile')?.email),
+              _buildProfileCard('Age', profileBox.get('userProfile')?.age.toString()),
+              _buildProfileCard('Mobile', profileBox.get('userProfile')?.mobile),
+              _buildProfileCard('NHS Number', profileBox.get('userProfile')?.nhsNumber),
+              _buildProfileCard('Gender', profileBox.get('userProfile')?.gender),
 
               SizedBox(height: 30.h),
 
-              // Logout Button
+              // Logout Button with Confirmation
               ElevatedButton(
-                onPressed: () async {
-                  // Clear user profile from Hive
-                  await profileBox.delete('userProfile');
-
-                  // Navigate to Register Screen
-                  Get.offAll(() => RegisterScreen());
-                },
+                onPressed: () => _showLogoutConfirmation(context, profileBox, activityBox, settingsBox),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                   padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 15.h),
@@ -85,9 +81,7 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               SizedBox(height: 40.h),
-              kheight40,
-              kheight40,
-            ],
+           kheight40 ,kheight40  ],
           ),
         ),
       ),
@@ -161,5 +155,41 @@ class ProfileScreen extends StatelessWidget {
       default:
         return Icons.info;
     }
+  }
+
+  // Show logout confirmation dialog with option to clear all data
+  void _showLogoutConfirmation(
+      BuildContext context, Box profileBox, Box activityBox, Box settingsBox) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Logout and Clear Data'),
+          content: const Text(
+              'Are you sure you want to log out and clear all data? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), // Close the dialog
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Clear all Hive boxes
+                await profileBox.clear();
+                await activityBox.clear();
+                await settingsBox.clear();
+
+                // Navigate to RegisterScreen
+                Get.offAll(() => RegisterScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+              ),
+              child: const Text('Logout and Clear Data',style:TextStyle(color: Colors.white) ,),
+            ),
+        ],
+        );
+      },
+    );
   }
 }
