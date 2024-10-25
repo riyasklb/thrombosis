@@ -1,22 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 import 'package:hive/hive.dart';
-import 'package:thrombosis/constans/color.dart';
-import 'package:thrombosis/model/hive_model.dart';
-import 'package:thrombosis/model/profile_model.dart';
+import 'package:thrombosis/tools/constans/color.dart';
+import 'package:thrombosis/tools/constans/model/hive_model.dart';
+import 'package:thrombosis/tools/constans/model/profile_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-class ActivityScreen extends StatefulWidget {
+class PdfGenaerateScreen extends StatefulWidget {
   @override
-  _ActivityScreenState createState() => _ActivityScreenState();
+  _PdfGenaerateScreenState createState() => _PdfGenaerateScreenState();
 }
 
-class _ActivityScreenState extends State<ActivityScreen> {
+class _PdfGenaerateScreenState extends State<PdfGenaerateScreen> {
   late Box<ActivityModel> _activityBox;
   late Box<ProfileModel> _profileBox;
   ProfileModel? _profile;
@@ -33,9 +33,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        leading: InkWell(
+            onTap: () {
+              Get.back();
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: kwhite,
+            )),
         title: Text(
-          'Profile and Export Activities',
+          'Export Activities',
           style: GoogleFonts.poppins(
               fontSize: 24.sp, fontWeight: FontWeight.w600, color: kwhite),
         ),
@@ -52,17 +61,20 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   Text(
                     'Export Reports',
                     style: GoogleFonts.montserrat(
-                        fontSize: 20.sp, fontWeight: FontWeight.bold),
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: kblack),
                   ),
                   SizedBox(height: 10.h),
                   _buildExportButton(
-                      context, 'Daily Report', _filterDailyData()),
+                      context, '   Daily Report   ', _filterDailyData()),
                   SizedBox(height: 10.h),
                   _buildExportButton(
-                      context, 'Weekly Report', _filterWeeklyData()),
+                      context, ' Weekly Report ', _filterWeeklyData()),
                   SizedBox(height: 10.h),
                   _buildExportButton(
                       context, 'Monthly Report', _filterMonthlyData()),
+                  kheight10,
                   _buildOverviewSection(),
                 ],
               ),
@@ -79,8 +91,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
               _showMessageDialog(context, 'No data available for $label');
             },
       style: ElevatedButton.styleFrom(
+        elevation: 5,
         padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 15.h),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.red,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.r),
         ),
@@ -257,11 +270,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
         ),
         pw.SizedBox(height: 10),
         pw.Text('Username: ${_profile!.username}'),
-        pw.Text('Email: ${_profile!.email}'),
-        pw.Text('Age: ${_profile!.age}'),
-        pw.Text('Mobile: ${_profile!.mobile}'),
         pw.Text('NHS Number: ${_profile!.nhsNumber}'),
-        pw.Text('Gender: ${_profile!.gender}'),
       ],
     );
   }

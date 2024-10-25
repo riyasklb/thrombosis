@@ -4,16 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'package:thrombosis/model/hive_model.dart';
-import 'package:thrombosis/model/profile_model.dart';
-import 'package:thrombosis/splash/splash_screen.dart';
+import 'package:thrombosis/tools/constans/model/hive_model.dart';
+import 'package:thrombosis/tools/constans/model/profile_model.dart';
+import 'package:thrombosis/views/splash/splash_screen.dart';
 
 
 void main() async{
   await Hive.initFlutter();
   Hive.registerAdapter(ActivityModelAdapter());
     Hive.registerAdapter(ProfileModelAdapter());
-   await Hive.openBox('userBox');
+   
    await Hive.openBox<ProfileModel>('profileBox');
     await Hive.openBox<ActivityModel>('activityBox');
     await Hive.openBox('settingsBox');

@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:thrombosis/bottum_nav/dummy.dart';
-import 'package:thrombosis/constans/color.dart';
-import 'package:thrombosis/views/acitivity_screen.dart';
-import 'package:thrombosis/views/dashboard_screen.dart';
+
+import 'package:thrombosis/tools/constans/color.dart';
+import 'package:thrombosis/views/add_daily_acitivity_screen.dart';
+
+import 'package:thrombosis/views/education.dart';
 import 'package:thrombosis/views/profile_screen.dart';
+import 'package:thrombosis/views/pdf_exel_output/home.dart';
 
 class BottumNavBar extends StatefulWidget {
   const BottumNavBar({Key? key}) : super(key: key);
@@ -34,11 +36,11 @@ class _BottumNavBarState extends State<BottumNavBar> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> bottomBarPages = [
-    DashboardScreen(),
+    HomeScreen(),
      
-      DailyActivitiesScreen(),
+      AddDailyActivitiesScreen(),
       ProfileScreen(),
-      EducationalResourcesScreen(),
+      EducationResourcesScreen(),
      
     ];
 

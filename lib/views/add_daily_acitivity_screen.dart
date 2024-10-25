@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:thrombosis/model/hive_model.dart';
+import 'package:thrombosis/tools/constans/model/hive_model.dart';
 import 'package:thrombosis/views/callender_screen.dart';
 
-class DailyActivitiesScreen extends StatefulWidget {
+class AddDailyActivitiesScreen extends StatefulWidget {
   @override
-  _DailyActivitiesScreenState createState() => _DailyActivitiesScreenState();
+  _AddDailyActivitiesScreenState createState() =>
+      _AddDailyActivitiesScreenState();
 }
 
-class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
+class _AddDailyActivitiesScreenState extends State<AddDailyActivitiesScreen> {
   final TextEditingController _walkingController = TextEditingController();
   final TextEditingController _sleepController = TextEditingController();
   final TextEditingController _waterIntakeController = TextEditingController();
@@ -45,16 +46,19 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
         ),
         backgroundColor: Colors.blueAccent,
       ),
-      body: Container(height: double.infinity,
+      body: Container(
+        height: double.infinity,
         color: Colors.grey[200], // Light background color
         padding: EdgeInsets.all(16.w),
-        child: SingleChildScrollView( // Allow scrolling for smaller screens
+        child: SingleChildScrollView(
+          // Allow scrolling for smaller screens
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Log Your Activities',
-                style: GoogleFonts.lato(fontSize: 24.sp, fontWeight: FontWeight.bold),
+                style: GoogleFonts.lato(
+                    fontSize: 24.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20.h),
               Card(
@@ -96,10 +100,12 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
                   onPressed: _submitActivities,
                   child: Text(
                     'Submit',
-                    style: GoogleFonts.lato(fontSize: 18.sp, color: Colors.white),
+                    style:
+                        GoogleFonts.lato(fontSize: 18.sp, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 80.w, vertical: 16.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 80.w, vertical: 16.h),
                     backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
@@ -113,12 +119,15 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ActivityCalendarScreen()), // Navigate to calendar screen
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ActivityCalendarScreen()), // Navigate to calendar screen
                     );
                   },
                   child: Text(
                     'View Activities Calendar',
-                    style: GoogleFonts.lato(fontSize: 16.sp, color: Colors.blueAccent),
+                    style: GoogleFonts.lato(
+                        fontSize: 16.sp, color: Colors.blueAccent),
                   ),
                 ),
               ),
@@ -189,11 +198,13 @@ class _DailyActivitiesScreenState extends State<DailyActivitiesScreen> {
       _walkingController.clear();
       _sleepController.clear();
       _waterIntakeController.clear();
-      
+
       // Navigate to the calendar screen after submission
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ActivityCalendarScreen()), // Redirect to calendar screen
+        MaterialPageRoute(
+            builder: (context) =>
+                ActivityCalendarScreen()), // Redirect to calendar screen
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

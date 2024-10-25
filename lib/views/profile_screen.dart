@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
-import 'package:thrombosis/model/profile_model.dart';
-import 'package:thrombosis/constans/color.dart';
-import '../auth/register_screen.dart';
+import 'package:thrombosis/tools/constans/model/profile_model.dart';
+import 'package:thrombosis/tools/constans/color.dart';
+import 'auth/register_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -60,14 +60,10 @@ class ProfileScreen extends StatelessWidget {
               // Logout Button
               ElevatedButton(
                 onPressed: () async {
-                  // Clear user profile data
+                  // Clear user profile from Hive
                   await profileBox.delete('userProfile');
 
-                  // Also clear any related data from other boxes like activityBox
-                  final activityBox = Hive.box('activityBox');
-                  await activityBox.clear();
-
-                  // Navigate to RegisterScreen
+                  // Navigate to Register Screen
                   Get.offAll(() => RegisterScreen());
                 },
                 style: ElevatedButton.styleFrom(
@@ -89,6 +85,8 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               SizedBox(height: 40.h),
+              kheight40,
+              kheight40,
             ],
           ),
         ),

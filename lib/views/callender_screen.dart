@@ -5,8 +5,8 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:thrombosis/bottum_nav/bottum_nav_bar.dart';
-import 'package:thrombosis/model/hive_model.dart';
+import 'package:thrombosis/views/bottum_nav/bottum_nav_bar.dart';
+import 'package:thrombosis/tools/constans/model/hive_model.dart';
 
 class ActivityCalendarScreen extends StatelessWidget {
   final Box<ActivityModel> _activityBox;
@@ -18,24 +18,25 @@ class ActivityCalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    appBar: AppBar(automaticallyImplyLeading: false,
-  title: Text(
-    'Activity Calendar',
-   style: GoogleFonts.poppins(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Activity Calendar',
+          style: GoogleFonts.poppins(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
-  ),
-  backgroundColor: Colors.blueAccent,
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: Colors.white), // Leading arrow color
-    onPressed: () {
-      Get.to(BottumNavBar());
-    },
-  ),
-),
-
+        ),
+        backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Colors.white), // Leading arrow color
+          onPressed: () {
+            Get.to(BottumNavBar());
+          },
+        ),
+      ),
       body: SfCalendar(
         view: CalendarView.month,
         onTap: (details) {
@@ -50,7 +51,8 @@ class ActivityCalendarScreen extends StatelessWidget {
         dataSource: ActivityDataSource(getActivities()),
         headerStyle: CalendarHeaderStyle(
           textAlign: TextAlign.center,
-          textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          textStyle: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
           backgroundColor: Colors.blueAccent,
         ),
       ),
@@ -65,10 +67,13 @@ class ActivityCalendarScreen extends StatelessWidget {
     for (var activity in activities) {
       appointments.add(
         Appointment(
-          startTime: DateTime(activity.date.year, activity.date.month, activity.date.day),
-          endTime: DateTime(activity.date.year, activity.date.month, activity.date.day, 23, 59, 59),
+          startTime: DateTime(
+              activity.date.year, activity.date.month, activity.date.day),
+          endTime: DateTime(activity.date.year, activity.date.month,
+              activity.date.day, 23, 59, 59),
           subject: 'Activity Logged',
-          notes: 'Walked: ${activity.minutesWalked} min\nSlept: ${activity.hoursSlept} hr\nWater: ${activity.waterIntake} L',
+          notes:
+              'Walked: ${activity.minutesWalked} min\nSlept: ${activity.hoursSlept} hr\nWater: ${activity.waterIntake} L',
           color: Colors.blue,
           isAllDay: true,
         ),
@@ -78,58 +83,63 @@ class ActivityCalendarScreen extends StatelessWidget {
     return appointments;
   }
 
-void _showActivitiesForDate(DateTime date, BuildContext context) {
-  final activitiesOnDate = _activityBox.values.where((activity) =>
-      activity.date.year == date.year &&
-      activity.date.month == date.month &&
-      activity.date.day == date.day).toList();
+  void _showActivitiesForDate(DateTime date, BuildContext context) {
+    final activitiesOnDate = _activityBox.values
+        .where((activity) =>
+            activity.date.year == date.year &&
+            activity.date.month == date.month &&
+            activity.date.day == date.day)
+        .toList();
 
-  final healthValidationResult = _validateHealth(activitiesOnDate);
+    final healthValidationResult = _validateHealth(activitiesOnDate);
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Activities on ${date.toLocal().toString().split(' ')[0]}'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (activitiesOnDate.isNotEmpty) ...[
-                ...activitiesOnDate.map((activity) {
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 5),
-                    child: ListTile(
-                      leading: Icon(Icons.check_circle, color: Colors.green),
-                      title: Text('Walked: ${activity.minutesWalked} min'),
-                      subtitle: Text('Slept: ${activity.hoursSlept} hr, Water: ${activity.waterIntake} L'),
-                    ),
-                  );
-                }).toList(),
-                SizedBox(height: 10),
-              ] else ...[
-                Text('No activities logged.', style: TextStyle(color: Colors.grey)),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              Text('Activities on ${date.toLocal().toString().split(' ')[0]}'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (activitiesOnDate.isNotEmpty) ...[
+                  ...activitiesOnDate.map((activity) {
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        leading: Icon(Icons.check_circle, color: Colors.green),
+                        title: Text('Walked: ${activity.minutesWalked} min'),
+                        subtitle: Text(
+                            'Slept: ${activity.hoursSlept} hr, Water: ${activity.waterIntake} L'),
+                      ),
+                    );
+                  }).toList(),
+                  SizedBox(height: 10),
+                ] else ...[
+                  Text('No activities logged.',
+                      style: TextStyle(color: Colors.grey)),
+                ],
+                Text(
+                  'Health Validation Result: $healthValidationResult',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                ),
               ],
-              Text(
-                'Health Validation Result: $healthValidationResult',
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent),
-              ),
-            ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Close'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // Function to validate health based on activity logs
   String _validateHealth(List<ActivityModel> activities) {
