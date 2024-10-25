@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:thrombosis/tools/dummy/dummy_initial_screen.dart';
 import 'package:thrombosis/views/auth/register_screen.dart';
 import 'package:thrombosis/views/bottum_nav/bottum_nav_bar.dart';
 
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.offAll(() => BottumNavBar());
     } else {
       // Navigate to RegisterScreen if not registered
-      Get.offAll(() => RegisterScreen());
+      Get.offAll(() => DummyHomeScreen());
     }
   }
 
