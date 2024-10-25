@@ -10,10 +10,14 @@ class EducationResourcesScreen extends StatelessWidget {
       appBar: AppBar(automaticallyImplyLeading: false,
         title: Text(
           'Education Resources',
-          style: GoogleFonts.poppins(fontSize: 22.sp, fontWeight: FontWeight.w600,color: Colors.white),
+        style: GoogleFonts.poppins(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         backgroundColor: kblue,
-        centerTitle: true,
+    
       ),
       body: Padding(
         padding: EdgeInsets.all(16.w),

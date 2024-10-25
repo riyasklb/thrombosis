@@ -36,11 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildProfileCard(),
               SizedBox(height: 20.h), // Responsive spacing
               ValueListenableBuilder(
-                valueListenable: _activityBox.listenable(),
-                builder: (context, Box<ActivityModel> box, _) {
-                  return _buildActivityGrid(box);
-                },
-              ),
+  valueListenable: _activityBox.listenable(),
+  builder: (context, Box<ActivityModel> box, _) {
+    // Check if the box is empty
+    if (box.isEmpty) {
+      return Center(
+        child: Text(
+          'No activities available.',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    }
+
+    // Build the grid only if the box has data
+    return _buildActivityGrid(box);
+  },
+),
+
 
               SizedBox(height: 20.h), // Responsive spacing
               _buildGraph(), // Graph showing activity trends

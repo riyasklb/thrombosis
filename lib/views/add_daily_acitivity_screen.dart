@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:thrombosis/tools/constans/model/hive_model.dart';
@@ -35,7 +37,7 @@ class _AddDailyActivitiesScreenState extends State<AddDailyActivitiesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(automaticallyImplyLeading: false,
         title: Text(
           'Daily Activities',
           style: GoogleFonts.poppins(
@@ -199,13 +201,9 @@ class _AddDailyActivitiesScreenState extends State<AddDailyActivitiesScreen> {
       _sleepController.clear();
       _waterIntakeController.clear();
 
-      // Navigate to the calendar screen after submission
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ActivityCalendarScreen()), // Redirect to calendar screen
-      );
+
+Get.to( ActivityCalendarScreen());
+    
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please fill in all fields')),

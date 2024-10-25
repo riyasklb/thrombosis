@@ -14,17 +14,17 @@ class ProfileScreen extends StatelessWidget {
     final ProfileModel? profileData = profileBox.get('userProfile'); // Fetch ProfileModel
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(automaticallyImplyLeading: false,
         title: Text(
           'Profile',
-          style: GoogleFonts.poppins(
+           style: GoogleFonts.poppins(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         backgroundColor: Colors.blueAccent,
-        centerTitle: true,
+       
         elevation: 8,
       ),
       body: Padding(
