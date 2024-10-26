@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:thrombosis/tools/constans/model/hive_model.dart';
 import 'package:thrombosis/tools/constans/model/profile_model.dart';
+import 'package:thrombosis/views/bottum_nav/bottum_nav_bar.dart';
 import 'package:thrombosis/views/goals/set_goals_with_remider_screen.dart';
 import 'package:thrombosis/views/splash/splash_screen.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -37,7 +38,7 @@ void main() async {
   await Hive.openBox<ProfileModel>('profileBox');
   await Hive.openBox<ActivityModel>('activityBox');
   await Hive.openBox('settingsBox');
-
+ await Hive.openBox('goalbox');
   runApp(const MyApp());
 }
 
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
             textTheme: GoogleFonts.poppinsTextTheme(), // Apply Google Fonts globally
             primarySwatch: Colors.blue,
           ),
-          home:  OptionalGoalSettingScreen(), // Start with SplashScreen
+          home:  SplashScreen(), // Start with SplashScreen
         );
       },
     );

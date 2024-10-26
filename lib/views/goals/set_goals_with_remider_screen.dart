@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart'; // Updated import for GetX
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:thrombosis/tools/constans/model/profile_model.dart';
 import 'package:thrombosis/views/bottum_nav/bottum_nav_bar.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -114,6 +115,14 @@ void scheduleReminder(String time, {bool isInjection = false}) {
   );
 }
 
+// Map to convert the time strings to actual hour and minute values
+final Map<String, String> timeMapping = {
+  'Morning': '08:00',
+  'Afternoon': '12:00',
+  'Evening': '18:00',
+  'Night': '20:00',
+};
+
 void _saveOptionalGoals() async {
   if (_formKey.currentState!.validate()) {
     // Save data to Hive or any other database
@@ -130,11 +139,13 @@ void _saveOptionalGoals() async {
 
     // Schedule notifications for medicine and injection times
     for (String time in selectedMedicineTimes) {
-      scheduleReminder(time); // Pass time for medicine
+      String mappedTime = timeMapping[time] ?? '08:00'; // Default to 8 AM if not found
+      scheduleReminder(mappedTime); // Pass mapped time for medicine
     }
 
     for (String time in selectedInjectionTimes) {
-      scheduleReminder(time, isInjection: true); // Pass time for injection
+      String mappedTime = timeMapping[time] ?? '08:00'; // Default to 8 AM if not found
+      scheduleReminder(mappedTime, isInjection: true); // Pass mapped time for injection
     }
 
     // Schedule a notification one minute after submission
@@ -144,9 +155,10 @@ void _saveOptionalGoals() async {
 
     Get.snackbar('Success', 'Optional goals saved successfully!',
         snackPosition: SnackPosition.BOTTOM);
-      Get.to(BottumNavBar());
+    Get.to(BottumNavBar());
   }
 }
+
 
 
 

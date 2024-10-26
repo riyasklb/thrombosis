@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileBox = Hive.box<ProfileModel>('profileBox');
-
+ final goalBox = Hive.box('goalBox');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -58,9 +58,18 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileCard('Water Intake Goal', profileBox.get('userProfile')?.waterIntakeGoal?.toString() ?? 'Not Set'),
               _buildProfileCard('Sleep Goal', profileBox.get('userProfile')?.sleepGoal?.toString() ?? 'Not Set'),
               _buildProfileCard('Walking Goal', profileBox.get('userProfile')?.walkingGoal?.toString() ?? 'Not Set'),
-              _buildProfileCard('Medicine Goal', profileBox.get('userProfile')?.medicineGoal ?? 'Not Set'),
-              _buildProfileCard('Food Goal', profileBox.get('userProfile')?.foodGoal ?? 'Not Set'),
-              _buildProfileCard('Injection Goal', profileBox.get('userProfile')?.injectionGoal ?? 'Not Set'),
+          Text('reminders'),
+
+             // Display Data from goalBox
+              _buildGoalCard('Medicine Times', goalBox.get('medicineTimes')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Medicine Frequency', goalBox.get('medicineFrequency')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Medicine Dosage', goalBox.get('medicineDosage')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Injection Times', goalBox.get('injectionTimes')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Injection Frequency', goalBox.get('injectionFrequency')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Injection Dosage', goalBox.get('injectionDosage')?.toString() ?? 'Not Set'),
+              _buildGoalCard('Breakfast Enabled', goalBox.get('enableBreakfast') == true ? 'Yes' : 'No'),
+              _buildGoalCard('Lunch Enabled', goalBox.get('enableLunch') == true ? 'Yes' : 'No'),
+              _buildGoalCard('Dinner Enabled', goalBox.get('enableDinner') == true ? 'Yes' : 'No'),
 
               SizedBox(height: 30.h),
 
@@ -93,6 +102,57 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+ // Helper to build goal data cards
+  Widget _buildGoalCard(String label, String value) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.h),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: EdgeInsets.all(16.w),
+        child: Row(
+          children: [
+            Icon(
+              Icons.check_circle_outline,
+              size: 28.r,
+              color: Colors.blueAccent,
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    value,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+//  Widget _buildProfileCard(String label, String? value) {
+//     return _buildGoalCard(label, value ?? 'Not Available');
+//   }
   // Helper to build profile data cards
   Widget _buildProfileCard(String label, String? value) {
     return Card(
