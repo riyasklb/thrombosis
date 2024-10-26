@@ -21,4 +21,7 @@ class ProfileModel extends HiveObject {
 
   @HiveField(5)
   late String gender;
+
+  @HiveField(6)  // New field for ethnicity
+  late String ethnicity;
 }

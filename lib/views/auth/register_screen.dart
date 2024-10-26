@@ -12,19 +12,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>(); 
- // Form key for validation
+  final _formKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController usernameController = TextEditingController();
-
   final TextEditingController ageController = TextEditingController();
-
   final TextEditingController mobileController = TextEditingController();
-
   final TextEditingController nhsNumberController = TextEditingController();
 
   String? selectedGender;
+  String? selectedEthnicity;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +39,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: EdgeInsets.all(16.w),
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey, // Attach the form key here
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 40.h),
-                CircleAvatar(backgroundImage: AssetImage('assets/logo/rb_2147993862.png'),radius: 150.r,),
-                
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/logo/rb_2147993862.png'),
+                  radius: 150.r,
+                ),
                 SizedBox(height: 40.h),
                 _buildTextField(
                   controller: usernameController,
@@ -116,17 +115,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(height: 16.h),
                 _buildGenderDropdown(),
+                SizedBox(height: 16.h),
+                _buildEthnicityDropdown(),
                 SizedBox(height: 30.h),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate() &&
-                          selectedGender != null) {
+                          selectedGender != null &&
+                          selectedEthnicity != null) {
                         _saveData(context);
-                      } else if (selectedGender == null) {
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Please select a gender'),
+                            content: Text('Please complete all fields'),
                           ),
                         );
                       }
@@ -148,7 +150,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-           kheight40,kheight40   ],
+                SizedBox(height: 40.h),
+              ],
             ),
           ),
         ),
@@ -166,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     TextInputType inputType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return TextFormField(
+    return TextFormField(autovalidateMode: AutovalidateMode.always,
       controller: controller,
       obscureText: obscureText,
       keyboardType: inputType,
@@ -184,7 +187,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  // Helper to build Gender Dropdown with validation
   Widget _buildGenderDropdown() {
     return DropdownButtonFormField<String>(
       value: selectedGender,
@@ -204,12 +206,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       }).toList(),
       onChanged: (value) {
-        selectedGender = value;
+        setState(() {
+          selectedGender = value;
+        });
       },
     );
   }
 
-  // Save data using ProfileModel to Hive
+  Widget _buildEthnicityDropdown() {
+    const ethnicities = [
+      'Asian: Bangladeshi',
+      'Asian: Chinese',
+      'Asian: Indian',
+      'Asian: Pakistani',
+      'Asian: Other Asian',
+      'Black: African',
+      'Black: Caribbean',
+      'Black: Other Black',
+      'Mixed: White and Asian',
+      'Mixed: White and Black African',
+      'Mixed: White and Black Caribbean',
+      'Mixed: Other Mixed',
+      'White: British',
+      'White: Irish',
+      'White: Gypsy or Irish Traveller',
+      'White: Roma',
+      'White: Other White',
+      'Other: Arab',
+      'Other: Any other ethnic group',
+    ];
+
+    return DropdownButtonFormField<String>(
+      value: selectedEthnicity,
+      decoration: InputDecoration(
+        labelText: 'Ethnicity',
+        prefixIcon: const Icon(Icons.public),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        filled: true,
+        fillColor: Colors.grey[200],
+      ),
+      items: ethnicities.map((ethnicity) {
+        return DropdownMenuItem(
+          value: ethnicity,
+          child: Text(ethnicity, style: GoogleFonts.poppins(fontSize: 16.sp)),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedEthnicity = value;
+        });
+      },
+    );
+  }
+
   Future<void> _saveData(BuildContext context) async {
     final profileBox = Hive.box<ProfileModel>('profileBox');
     final settingsBox = Hive.box('settingsBox');
@@ -220,12 +271,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ..age = int.parse(ageController.text)
       ..mobile = mobileController.text
       ..nhsNumber = nhsNumberController.text
-      ..gender = selectedGender ?? 'Not specified';
+      ..gender = selectedGender ?? 'Not specified'
+      ..ethnicity = selectedEthnicity ?? 'Not specified';
 
     await profileBox.put('userProfile', profile);
     await settingsBox.put('isRegistered', true);
-
-    print("Profile data saved: ${profile.username}");
 
     Navigator.pushReplacement(
       context,
