@@ -23,13 +23,19 @@ class ProfileModelAdapter extends TypeAdapter<ProfileModel> {
       ..mobile = fields[3] as String
       ..nhsNumber = fields[4] as String
       ..gender = fields[5] as String
-      ..ethnicity = fields[6] as String;
+      ..ethnicity = fields[6] as String
+      ..waterIntakeGoal = fields[7] as double?
+      ..sleepGoal = fields[8] as double?
+      ..walkingGoal = fields[9] as double?
+      ..medicineGoal = fields[10] as String?
+      ..foodGoal = fields[11] as String?
+      ..injectionGoal = fields[12] as String?;
   }
 
   @override
   void write(BinaryWriter writer, ProfileModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.username)
       ..writeByte(1)
@@ -43,7 +49,19 @@ class ProfileModelAdapter extends TypeAdapter<ProfileModel> {
       ..writeByte(5)
       ..write(obj.gender)
       ..writeByte(6)
-      ..write(obj.ethnicity);
+      ..write(obj.ethnicity)
+      ..writeByte(7)
+      ..write(obj.waterIntakeGoal)
+      ..writeByte(8)
+      ..write(obj.sleepGoal)
+      ..writeByte(9)
+      ..write(obj.walkingGoal)
+      ..writeByte(10)
+      ..write(obj.medicineGoal)
+      ..writeByte(11)
+      ..write(obj.foodGoal)
+      ..writeByte(12)
+      ..write(obj.injectionGoal);
   }
 
   @override

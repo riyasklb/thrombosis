@@ -12,8 +12,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileBox = Hive.box<ProfileModel>('profileBox');
-    final activityBox = Hive.box<ActivityModel>('activityBox');
-    final settingsBox = Hive.box('settingsBox');
 
     return Scaffold(
       appBar: AppBar(
@@ -56,12 +54,19 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileCard('Mobile', profileBox.get('userProfile')?.mobile),
               _buildProfileCard('NHS Number', profileBox.get('userProfile')?.nhsNumber),
               _buildProfileCard('Gender', profileBox.get('userProfile')?.gender),
+              _buildProfileCard('Ethnicity', profileBox.get('userProfile')?.ethnicity),
+              _buildProfileCard('Water Intake Goal', profileBox.get('userProfile')?.waterIntakeGoal?.toString() ?? 'Not Set'),
+              _buildProfileCard('Sleep Goal', profileBox.get('userProfile')?.sleepGoal?.toString() ?? 'Not Set'),
+              _buildProfileCard('Walking Goal', profileBox.get('userProfile')?.walkingGoal?.toString() ?? 'Not Set'),
+              _buildProfileCard('Medicine Goal', profileBox.get('userProfile')?.medicineGoal ?? 'Not Set'),
+              _buildProfileCard('Food Goal', profileBox.get('userProfile')?.foodGoal ?? 'Not Set'),
+              _buildProfileCard('Injection Goal', profileBox.get('userProfile')?.injectionGoal ?? 'Not Set'),
 
               SizedBox(height: 30.h),
 
               // Logout Button with Confirmation
               ElevatedButton(
-                onPressed: () => _showLogoutConfirmation(context, profileBox, activityBox, settingsBox),
+                onPressed: () => _showLogoutConfirmation(context, profileBox),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                   padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 15.h),
@@ -81,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               SizedBox(height: 40.h),
-           kheight40 ,kheight40  ],
+            ],
           ),
         ),
       ),
@@ -152,14 +157,27 @@ class ProfileScreen extends StatelessWidget {
         return Icons.verified;
       case 'Gender':
         return Icons.people;
+      case 'Ethnicity':
+        return Icons.assignment_ind;
+      case 'Water Intake Goal':
+        return Icons.local_drink;
+      case 'Sleep Goal':
+        return Icons.bed;
+      case 'Walking Goal':
+        return Icons.directions_walk;
+      case 'Medicine Goal':
+        return Icons.medical_services;
+      case 'Food Goal':
+        return Icons.fastfood;
+      case 'Injection Goal':
+        return Icons.mediation_outlined;
       default:
         return Icons.info;
     }
   }
 
   // Show logout confirmation dialog with option to clear all data
-  void _showLogoutConfirmation(
-      BuildContext context, Box profileBox, Box activityBox, Box settingsBox) {
+  void _showLogoutConfirmation(BuildContext context, Box profileBox) {
     showDialog(
       context: context,
       builder: (context) {
@@ -176,8 +194,6 @@ class ProfileScreen extends StatelessWidget {
               onPressed: () async {
                 // Clear all Hive boxes
                 await profileBox.clear();
-                await activityBox.clear();
-                await settingsBox.clear();
 
                 // Navigate to RegisterScreen
                 Get.offAll(() => RegisterScreen());
@@ -185,9 +201,9 @@ class ProfileScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
               ),
-              child: const Text('Logout and Clear Data',style:TextStyle(color: Colors.white) ,),
+              child: const Text('Logout and Clear Data', style: TextStyle(color: Colors.white)),
             ),
-        ],
+          ],
         );
       },
     );

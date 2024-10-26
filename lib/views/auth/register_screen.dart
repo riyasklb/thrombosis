@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:thrombosis/views/bottum_nav/bottum_nav_bar.dart';
 import 'package:thrombosis/tools/constans/color.dart';
 import 'package:thrombosis/tools/constans/model/profile_model.dart';
+import 'package:thrombosis/views/goals/set_goals_scrrw.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -169,7 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     TextInputType inputType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
-    return TextFormField(autovalidateMode: AutovalidateMode.always,
+    return TextFormField(autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       obscureText: obscureText,
       keyboardType: inputType,
@@ -279,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => BottumNavBar()),
+      MaterialPageRoute(builder: (context) => GoalSettingScreen()),
     );
   }
 }

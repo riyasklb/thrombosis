@@ -22,6 +22,23 @@ class ProfileModel extends HiveObject {
   @HiveField(5)
   late String gender;
 
-  @HiveField(6)  // New field for ethnicity
+  @HiveField(6) // New field for ethnicity
   late String ethnicity;
+
+  @HiveField(7)
+  double? waterIntakeGoal; // Liters
+
+  @HiveField(8)
+  double? sleepGoal; // Hours
+
+  @HiveField(9)
+  double? walkingGoal;
+    @HiveField(10)
+  String? medicineGoal; // Morning, Afternoon, Night
+
+  @HiveField(11)
+  String? foodGoal; // Breakfast, Lunch, Dinner
+
+  @HiveField(12)
+  String? injectionGoal;
 }
